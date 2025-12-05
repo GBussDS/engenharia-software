@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 
 class Node(ABC):
     @abstractmethod
-    def action(self):
+    def action(self, value):
         pass
 
 class DecisionNode(Node):
@@ -51,4 +51,23 @@ class SplittingState(State):
             builder.currentNode.leftNode = LeafNode()
             builder.currentNode.rightNode = LeafNode()
 
-        
+            print("Checa se deve parar voltando pro stopping state:")
+            builder.state = StoppingState()
+            
+class PruningState(State):
+    def process(self, builder):
+        print("Faz poda.")
+        #No caso como é mock não faz
+        builder.state = None
+    
+class StoppingState(State):
+    def process(self, builder):
+        print("Verifica se para.")
+        criterioParadaAtingido = False
+
+        if criterioParadaAtingido:
+            print("Procede pra pruning.")
+            builder.state = PruningState()
+        else:
+            print("Volta a dividir.")
+            builder.state = SplittingState()
