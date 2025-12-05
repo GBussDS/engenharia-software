@@ -6,7 +6,7 @@ class Node(ABC):
         pass
 
 class DecisionNode(Node):
-    def __init__(self, leftNode, rightNode, threshold):
+    def __init__(self, threshold, leftNode=None, rightNode=None):
         self.leftNode = leftNode
         self.rightNode = rightNode
         self.threshold = threshold
@@ -29,21 +29,26 @@ class LeafNode(Node):
     def printValues(self):
         print(f"Valores no nó: {self.valueList}")
 
-
 class TreeBuilder():
     def __init__(self):
         self.currentNode = None
         self.state = None
+        self.root = None
         
 def State(ABC):
     @abstractmethod
-    def process(self):
+    def process(self, builder):
         pass
 
 class SplittingState(State):
-    def processs(self):
-        print("Dividiria o nó.")
-        
-
+    def processs(self, builder):
+        if builder.root == None:
+            print("Cria nó raiz caso não tenha.")
+            builder.root = DecisionNode(10)
+            builder.currentNode = builder.root
+        else:
+            print("Divide o nó atual em dois.")
+            builder.currentNode.leftNode = LeafNode()
+            builder.currentNode.rightNode = LeafNode()
 
         
