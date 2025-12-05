@@ -28,12 +28,6 @@ class LeafNode(Node):
     
     def printValues(self):
         print(f"Valores no nó: {self.valueList}")
-
-class TreeBuilder():
-    def __init__(self):
-        self.currentNode = None
-        self.state = None
-        self.root = None
         
 def State(ABC):
     @abstractmethod
@@ -53,7 +47,7 @@ class SplittingState(State):
 
             print("Checa se deve parar voltando pro stopping state:")
             builder.state = StoppingState()
-            
+
 class PruningState(State):
     def process(self, builder):
         print("Faz poda.")
@@ -71,3 +65,13 @@ class StoppingState(State):
         else:
             print("Volta a dividir.")
             builder.state = SplittingState()
+
+class TreeBuilder():
+    def __init__(self):
+        self.currentNode = None
+        self.state = None
+        self.root = None
+    
+    def runState(self):
+        if self.state:
+            self.state.process(self)
