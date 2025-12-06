@@ -5,6 +5,10 @@ class Node(ABC):
     def action(self, value):
         pass
 
+    @abstractmethod
+    def action(self, visitor):
+        pass
+
 class DecisionNode(Node):
     def __init__(self, threshold, leftNode=None, rightNode=None):
         self.leftNode = leftNode
@@ -17,6 +21,9 @@ class DecisionNode(Node):
             return self.leftNode.action(value)
         else:
             return self.rightNode.action(value)
+    
+    def accept(self, visitor):
+        visitor.visitDecision(self)
 
 class LeafNode(Node):
     def __init__(self):
@@ -26,6 +33,9 @@ class LeafNode(Node):
         print("Adiciona o valor a sua lista.")
         self.valueList.append(value)
     
+    def accept(self, visitor):
+        visitor.visitLeaf(self)
+
     def printValues(self):
         print(f"Valores no nó: {self.valueList}")
         
@@ -108,18 +118,26 @@ class DepthVisitor(Visitor):
     def __init__(self, depth):
         self.currentDepth = 0
         self.depth = depth
+        self.matchingNodes = []
 
-    def visit(self, node, currentDepth):
-        if self.depth == currentDepth:
-            return node, currentDepth
+    def visitDecision(self, node, currentDepth):
+        if self.depth == self.currentDepth:
+            self.matchingNodes.append(node)
+            return
         
-        if isinstance(node, DecisionNode):
-            if node.leftNode:
-                return self.visit(node.leftNode, currentDepth + 1)
-            if node.rightNode:
-                return self.visit(node.RightNode, currentDepth + 1)
+        self.currentDepth += 1
 
-        return None, 0
+        if node.leftNode:
+            node.leftNode.accept(self)
+        if node.rightNode:
+            node.rightNode.accept(self)
+
+        self.currentDepth -= 1
+
+    def visitLeaf(self, node):
+        if self.currentDepth == self.depth:
+            self.matchingNodes.append(node)
+
 
 class CountLeavesVisitor(Visitor):
     def __init__(self):
@@ -133,6 +151,3 @@ class CountLeavesVisitor(Visitor):
                 self.visit(node.leftNode)
             if node.rightNode:
                 self.visit(node.RightNode)
-    
-
-                
