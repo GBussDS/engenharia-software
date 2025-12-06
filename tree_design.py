@@ -75,3 +75,26 @@ class TreeBuilder():
     def runState(self):
         if self.state:
             self.state.process(self)
+
+class PreOrderIterator():
+    def __init__(self, root):
+        self.stack = []
+        if root:
+            self.stack.append(root)
+
+    def __iter__(self):
+        return self
+    
+    def __next__(self):
+        if not self.stack:
+            raise StopIteration
+
+        currentNode = self.stach.pop()
+
+        if isinstance(currentNode, DecisionNode):
+            if currentNode.leftNode:
+                self.stack.append(currentNode.rightNode)
+            if currentNode.rightNode:
+                self.stack.append(currentNode.rightNode)
+            
+        return currentNode
