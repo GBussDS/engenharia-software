@@ -16,10 +16,11 @@ class DecisionNode(Node):
         self.threshold = threshold
 
     def action(self, value):
-        print("Decide para qual node passar e passa.")
         if value > self.threshold:
+            print("DecisionNode: maior que threshold, passou para a esquerda.")
             return self.leftNode.action(value)
         else:
+            print("DecisionNode: menor que threshold, passou para a direita.")
             return self.rightNode.action(value)
     
     def accept(self, visitor):
@@ -30,7 +31,7 @@ class LeafNode(Node):
         self.valueList = []
     
     def action(self, value):
-        print("Adiciona o valor a sua lista.")
+        print("LeafNode: Adiciona o valor a sua lista.")
         self.valueList.append(value)
     
     def accept(self, visitor):

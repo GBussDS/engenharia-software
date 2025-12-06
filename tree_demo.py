@@ -11,5 +11,15 @@ while builder.state is not None and step < maxStep:
 
 print('#'*100)
 
+root = builder.root
+
+print("\nValor entrando maior que o threshold fixo de 10:\n")
+root.action(15)
+
+print("\nValor entrando menor que o threshold fixo de 10:\n")
+root.action(5)
+
+print('#'*100)
+
 
 
