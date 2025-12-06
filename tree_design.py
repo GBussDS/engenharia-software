@@ -115,7 +115,10 @@ class PreOrderIterator():
 
 class Visitor(ABC):
     @abstractmethod
-    def visit(self):
+    def visitDecision(self, node):
+        pass
+
+    def visitLeaf(self, node):
         pass
 
 class DepthVisitor(Visitor):
@@ -147,11 +150,14 @@ class CountLeavesVisitor(Visitor):
     def __init__(self):
         self.leafCount = 0
 
-    def visit(self, node):
+    def visitDecision(self, node):
+        if node.leftNode:
+            node.leftNode.accept(self)
+        if node.rightNode:
+            node.rightNode.accept(self)
+
+    def visitLeaf(self, node):
+        print("CountLeavesVisitor: contando folha.")
         self.leafCount += 1
 
-        if isinstance(node, DecisionNode):
-            if node.leftNode:
-                self.visit(node.leftNode)
-            if node.rightNode:
-                self.visit(node.RightNode)
+        

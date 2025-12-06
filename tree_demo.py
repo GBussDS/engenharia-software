@@ -32,5 +32,12 @@ for node in iterator:
     if isinstance(node, LeafNode):
         node.printValues()
     
+print('#'*100)
 
+print("Demonstração CountLeavesVisitor:\n")
 
+countVisitor = CountLeavesVisitor()
+
+root.accept(countVisitor)
+
+print(f"Nós encontrados: {countVisitor.leafCount}")
