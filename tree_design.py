@@ -103,7 +103,7 @@ class PreOrderIterator():
         if not self.stack:
             raise StopIteration
 
-        currentNode = self.stach.pop()
+        currentNode = self.stack.pop()
 
         if isinstance(currentNode, DecisionNode):
             if currentNode.leftNode:

@@ -1,6 +1,7 @@
 from tree_design import *
 
-print("Criação da árvore:")
+print("Demonstração TreeBuilder e State:\n")
+
 builder = TreeBuilder()
 
 step = 0
@@ -11,15 +12,25 @@ while builder.state is not None and step < maxStep:
 
 print('#'*100)
 
+print("Demonstração Node:\n")
 root = builder.root
 
-print("\nValor entrando maior que o threshold fixo de 10:\n")
+print("Valor entrando maior que o threshold fixo de 10:\n")
 root.action(15)
 
 print("\nValor entrando menor que o threshold fixo de 10:\n")
 root.action(5)
 
+
 print('#'*100)
 
+print("Demonstração Iterador:\n")
+iterator = PreOrderIterator(root)
+
+for node in iterator:
+    print(node.__class__.__name__)
+    if isinstance(node, LeafNode):
+        node.printValues()
+    
 
 
