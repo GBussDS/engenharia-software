@@ -98,3 +98,41 @@ class PreOrderIterator():
                 self.stack.append(currentNode.rightNode)
             
         return currentNode
+
+class Visitor(ABC):
+    @abstractmethod
+    def visit(self):
+        pass
+
+class DepthVisitor(Visitor):
+    def __init__(self, depth):
+        self.currentDepth = 0
+        self.depth = depth
+
+    def visit(self, node, currentDepth):
+        if self.depth == currentDepth:
+            return node, currentDepth
+        
+        if isinstance(node, DecisionNode):
+            if node.leftNode:
+                return self.visit(node.leftNode, currentDepth + 1)
+            if node.rightNode:
+                return self.visit(node.RightNode, currentDepth + 1)
+
+        return None, 0
+
+class CountLeavesVisitor(Visitor):
+    def __init__(self):
+        self.leafCount = 0
+
+    def visit(self, node):
+        self.leafCount += 1
+
+        if isinstance(node, DecisionNode):
+            if node.leftNode:
+                self.visit(node.leftNode)
+            if node.rightNode:
+                self.visit(node.RightNode)
+    
+
+                
