@@ -2,20 +2,20 @@ from abc import ABC, abstractmethod
 
 class Node(ABC):
     @abstractmethod
-    def action(self, value):
+    def action(self, value: int):
         pass
 
     @abstractmethod
-    def action(self, visitor):
+    def accept(self, visitor):
         pass
 
 class DecisionNode(Node):
-    def __init__(self, threshold, leftNode=None, rightNode=None):
+    def __init__(self, threshold, leftNode:Node = None, rightNode:Node = None):
         self.leftNode = leftNode
         self.rightNode = rightNode
         self.threshold = threshold
 
-    def action(self, value):
+    def action(self, value: int):
         if value > self.threshold:
             print("DecisionNode: maior que threshold, passou para a esquerda.")
             return self.leftNode.action(value)
@@ -30,7 +30,7 @@ class LeafNode(Node):
     def __init__(self):
         self.valueList = []
     
-    def action(self, value):
+    def action(self, value: int):
         print("LeafNode: Adiciona o valor a sua lista.")
         self.valueList.append(value)
     
@@ -91,7 +91,7 @@ class TreeBuilder():
             self.state.process(self)
 
 class PreOrderIterator():
-    def __init__(self, root):
+    def __init__(self, root: Node):
         self.stack = []
         if root:
             self.stack.append(root)
@@ -107,7 +107,7 @@ class PreOrderIterator():
 
         if isinstance(currentNode, DecisionNode):
             if currentNode.leftNode:
-                self.stack.append(currentNode.rightNode)
+                self.stack.append(currentNode.leftNode)
             if currentNode.rightNode:
                 self.stack.append(currentNode.rightNode)
             
@@ -115,19 +115,19 @@ class PreOrderIterator():
 
 class Visitor(ABC):
     @abstractmethod
-    def visitDecision(self, node):
+    def visitDecision(self, node: Node):
         pass
 
-    def visitLeaf(self, node):
+    def visitLeaf(self, node: Node):
         pass
 
 class DepthVisitor(Visitor):
-    def __init__(self, depth):
+    def __init__(self, depth: int):
         self.currentDepth = 0
         self.depth = depth
         self.matchingNodes = []
 
-    def visitDecision(self, node):
+    def visitDecision(self, node: DecisionNode):
         if self.depth == self.currentDepth:
             print("DepthVisitor: nó encontrado na profundidade.")
             self.matchingNodes.append(node)
@@ -142,7 +142,7 @@ class DepthVisitor(Visitor):
 
         self.currentDepth -= 1
 
-    def visitLeaf(self, node):
+    def visitLeaf(self, node: LeafNode):
         if self.currentDepth == self.depth:
             print("DepthVisitor: folha encontrada na profundidade.")
             self.matchingNodes.append(node)
