@@ -40,4 +40,12 @@ countVisitor = CountLeavesVisitor()
 
 root.accept(countVisitor)
 
-print(f"Nós encontrados: {countVisitor.leafCount}")
+print(f"\nNós encontrados: {countVisitor.leafCount}")
+
+print("\nDemonstração DepthVisitor:\n")
+
+depthVisitor = DepthVisitor(1)
+
+root.accept(depthVisitor)
+
+print(f"\nNós encontrados na profundidade 1: {len(depthVisitor.matchingNodes)}")

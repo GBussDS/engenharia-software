@@ -127,8 +127,9 @@ class DepthVisitor(Visitor):
         self.depth = depth
         self.matchingNodes = []
 
-    def visitDecision(self, node, currentDepth):
+    def visitDecision(self, node):
         if self.depth == self.currentDepth:
+            print("DepthVisitor: nó encontrado na profundidade.")
             self.matchingNodes.append(node)
             return
         
@@ -143,6 +144,7 @@ class DepthVisitor(Visitor):
 
     def visitLeaf(self, node):
         if self.currentDepth == self.depth:
+            print("DepthVisitor: folha encontrada na profundidade.")
             self.matchingNodes.append(node)
 
 
