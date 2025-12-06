@@ -39,47 +39,50 @@ class LeafNode(Node):
     def printValues(self):
         print(f"Valores no nó: {self.valueList}")
         
-def State(ABC):
+class State(ABC):
     @abstractmethod
     def process(self, builder):
         pass
 
 class SplittingState(State):
-    def processs(self, builder):
+    def process(self, builder):
         if builder.root == None:
-            print("Cria nó raiz caso não tenha.")
+            print("SplittingState: criando nó raiz.")
             builder.root = DecisionNode(10)
             builder.currentNode = builder.root
+
+            #Checa se deve parar voltando pro stopping state
+            builder.state = StoppingState()
         else:
-            print("Divide o nó atual em dois.")
+            print("SplittingState: dividindo o nó atual em dois.")
             builder.currentNode.leftNode = LeafNode()
             builder.currentNode.rightNode = LeafNode()
 
-            print("Checa se deve parar voltando pro stopping state:")
+            #Checa se deve parar voltando pro stopping state
             builder.state = StoppingState()
 
 class PruningState(State):
     def process(self, builder):
-        print("Faz poda.")
+        print("Prunning State: poda.")
         #No caso como é mock não faz
         builder.state = None
     
 class StoppingState(State):
     def process(self, builder):
-        print("Verifica se para.")
+        print("Stopping State: verifica se para.")
         criterioParadaAtingido = False
 
         if criterioParadaAtingido:
-            print("Procede pra pruning.")
+            print("Stopping State: procede pra pruning.")
             builder.state = PruningState()
         else:
-            print("Volta a dividir.")
+            print("Stopping State: volta pro SplittingState.")
             builder.state = SplittingState()
 
 class TreeBuilder():
     def __init__(self):
         self.currentNode = None
-        self.state = None
+        self.state = SplittingState()
         self.root = None
     
     def runState(self):
